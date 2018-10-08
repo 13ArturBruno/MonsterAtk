@@ -15,7 +15,7 @@ physics.setGravity( 0, 0 )
 
 -- Initialize variables
 local score = 0
-local lives = 3
+local lives = 1
 local died = false
 local monstersTable = {}
 local gameLoopTimer
@@ -35,9 +35,9 @@ end
 
 local function createMonsters()
 
-		local newMonster = display.newImageRect("_img/veni.png", 150, 150)
+		local newMonster = display.newImageRect(mainGroup, "_img/veni.png", 150, 150)
 	   	table.insert( monstersTable, newMonster)
-	   	physics.addBody( newMonster, "dynamic", { radius=70, bounce=0.8 } )
+	   	physics.addBody( newMonster, "dynamic", { radius=50, bounce=0.8 } )
 	   	newMonster.myName = "monster"
 
 	   	local whereFrom = math.random(1)
@@ -89,6 +89,18 @@ end
 local function gameLoop()
 
 	createMonsters()
+
+	for i = #monstersTable, 1, -1 do
+        local thisMonster = monstersTable[i]
+ 
+        if ( 
+             thisMonster.y < -100 or
+             thisMonster.y > display.contentHeight + 100 )
+        then
+            display.remove( thisMonster )
+            table.remove( monstersTable, i )
+        end
+    end
 
 end
 
@@ -152,10 +164,8 @@ local function onCollision( event )
 
 				if ( lives == 0 ) then
 					display.remove( ship )
-					display.remove(monstersTable)
-					display.remove( monsters )
+					timer.performWithDelay( 1000, endGame )
 
-					timer.performWithDelay( 2000, endGame )
 				else
 					ship.alpha = 0
 					timer.performWithDelay( 1000, restoreShip )
@@ -251,7 +261,7 @@ function scene:hide( event )
 
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is on screen (but is about to go off screen)
-
+		timer.cancel( gameLoopTimer )
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
 		Runtime:removeEventListener( "collision", onCollision )

@@ -58,8 +58,8 @@ local function createMonsters()
 			        newMonster:setLinearVelocity(-300, 0)
 			        print( display.actualContentHeight )
 
-			        local newLaserEnemy = display.newImageRect(mainGroup, "_img/LaserEnemy.png", 30, 30)
-					 physics.addBody( newLaserEnemy, "dynamic", { isSensor=true} )
+			        local newLaserEnemy = display.newImageRect(mainGroup, "_img/laserEnemy.png", 30, 30)
+					 	physics.addBody( newLaserEnemy, "dynamic", { isSensor=true} )
 					    newLaserEnemy.isBullet = true
 					    newLaserEnemy.myName = "LaserEnemy"
 					    newLaserEnemy.x = newMonster.x
@@ -75,8 +75,8 @@ local function createMonsters()
 			        newMonster2.y = math.random(60,740)
 			        newMonster2:setLinearVelocity(-300, 0)
 
-			        local newLaserEnemy = display.newImageRect(mainGroup, "_img/LaserEnemy.png", 30, 30)
-					 physics.addBody( newLaserEnemy, "dynamic", { isSensor=true} )
+			        local newLaserEnemy = display.newImageRect(mainGroup, "_img/laserEnemy.png", 30, 30)
+					 	physics.addBody( newLaserEnemy, "dynamic", { isSensor=true} )
 					    newLaserEnemy.isBullet = true
 					    newLaserEnemy.myName = "LaserEnemy"
 					    newLaserEnemy.x = newMonster2.x
@@ -88,18 +88,6 @@ local function createMonsters()
 			end
 end
 
-local function LaserEnemy(m)
-	local newLaserEnemy = display.newImageRect(mainGroup, "_img/LaserEnemy.png", 30, 30)
-	 physics.addBody( newLaserEnemy, "dynamic", { isSensor=true} )
-	    newLaserEnemy.isBullet = true
-	    newLaserEnemy.myName = "LaserEnemy"
-	    newLaserEnemy.x = m.x
-	    newLaserEnemy.y = m.y
-		newLaserEnemy:toBack()
-		transition.to( newLaserEnemy, { x = -1200, time=2200,
-	        onComplete = function() display.remove( newLaserEnemy ) end
-	    } )
-end
 local function Laser()
 		audio.play( fireSound )
 	    local newLaser = display.newImageRect(mainGroup, "_img/laser.png", 30, 20 )
@@ -325,7 +313,7 @@ function scene:show( event )
 		-- Code here runs when the scene is entirely on screen
 		physics.start()
 		Runtime:addEventListener( "collision", onCollision )
-		gameLoopTimer = timer.performWithDelay( 800, gameLoop, 0 )
+		gameLoopTimer = timer.performWithDelay( 700, gameLoop, 0 )
 		gameLaserTimer = timer.performWithDelay( 400, laserLoop, 0 )
 		audio.setVolume( 0.4, { channel=1 } )
 		audio.play( musicTrack, { channel=1, loops=-1 } )

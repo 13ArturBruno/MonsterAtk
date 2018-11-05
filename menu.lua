@@ -7,6 +7,7 @@ local scene = composer.newScene()
 -- Code outside of the scene event functions below will only be executed ONCE unless
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
+local musicTrack
 
 local function gotoGame()
 	composer.gotoScene( "game", { time=800, effect="crossFade" } )
@@ -31,21 +32,24 @@ function scene:create( event )
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
 
-	local title = display.newImageRect( sceneGroup, "_img/title.png", 580, 160 )
+	local title = display.newImageRect( sceneGroup, "_img/title.png", 600, 240 )
 	title.x = display.contentCenterX + 370
-	title.y = 100
+	title.y = 260
 
 	--local playButton = display.newText( sceneGroup, "Play", display.contentCenterX, 700, native.systemFont, 44 )
 	--playButton:setFillColor( 0.82, 0.86, 1 )
 	local playButton = display.newImageRect(sceneGroup, "_img/start.png", 200, 200 )
-	      playButton.x = display.contentCenterX + 150
+	      playButton.x = display.contentCenterX + 80
 	      playButton.y = display.contentCenterY + 200
 
-	local highScoresButton = display.newText( sceneGroup, "High Scores", display.contentCenterX + 460, display.contentCenterY + 200, native.systemFont, 60 )
+	local highScoresButton = display.newText( sceneGroup, "High Scores", display.contentCenterX + 430, display.contentCenterY + 200, native.systemFont, 80 )
 	highScoresButton:setFillColor( 0.75, 0.78, 1 )
 
 	playButton:addEventListener( "tap", gotoGame )
 	highScoresButton:addEventListener( "tap", gotoHighScores )
+
+	musicTrack = audio.loadStream( "_sounds/menu.mp3" )
+
 end
 
 
@@ -57,9 +61,10 @@ function scene:show( event )
 
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is still off screen (but is about to come on screen)
-
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
+		audio.setVolume( 0.4, { channel=1 } )
+		audio.play( musicTrack, { channel=1, loops=-1 } )
 
 	end
 end
@@ -76,7 +81,7 @@ function scene:hide( event )
 
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
-
+		audio.stop( 1 )
 	end
 end
 
@@ -86,7 +91,7 @@ function scene:destroy( event )
 
 	local sceneGroup = self.view
 	-- Code here runs prior to the removal of scene's view
-
+	audio.stop( 1 )
 end
 
 
